@@ -1,8 +1,8 @@
-import bunnyUpload from './index.js';
+import bunnyUpload from 'bunny-upload';
 
 let res = bunnyUpload({
     key: "4a15bce9-7e5d-4a92-ab57674d36f6-a966-46bc",
-    localDir: './test-images',
+    localDir: '/Users/diegoponciano/Desktop/ryan/test-images',
     cdnDir: 'tipsy/transcoded',
     concurrency: 2,
     overwrite: false,
