@@ -12,7 +12,6 @@
   "license": "MIT",
   "dependencies": {
     "validate.js": "^0.13.1",
-    "bunny-upload": "rex-empire/bunny-upload",
     "core-js": "^3.8.3",
     "es6-promise-pool": "^2.5.0",
     "fs": "^0.0.1-security",
