@@ -11,6 +11,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "bunny-upload": "git+ssh:git@gitlab.com:jay.dee.force/bunny-upload.git",
     "core-js": "^3.8.3",
     "es6-promise-pool": "^2.5.0",
     "fs": "^0.0.1-security",
