@@ -1416,18 +1416,9 @@ buffer-from@^1.0.0:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
   integrity sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==
 
-"bunny-upload@git+ssh:git@gitlab.com:jay.dee.force/bunny-upload.git":
-  version "1.0.0"
-  resolved "git+ssh:git@gitlab.com:jay.dee.force/bunny-upload.git#9910af41d9ab69437ecf399741dde2f6520df0cb"
-  dependencies:
-    core-js "^3.8.3"
-    es6-promise-pool "^2.5.0"
-    fs "^0.0.1-security"
-    glob "^7.1.6"
-    path "^0.12.7"
-    regenerator-runtime "^0.13.7"
-    superagent "^6.1.0"
-    validate.js "^0.13.1"
+bunny-upload@rex-empire/bunny-upload:
+  version "0.0.0"
+  resolved "https://codeload.github.com/rex-empire/bunny-upload/tar.gz/ada8f33429f8daf3b624ce6e8b13f82d59b408a5"
 
 cache-base@^1.0.1:
   version "1.0.1"

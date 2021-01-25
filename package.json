@@ -11,15 +11,15 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bunny-upload": "git+ssh:git@gitlab.com:jay.dee.force/bunny-upload.git",
+    "validate.js": "^0.13.1",
+    "bunny-upload": "rex-empire/bunny-upload",
     "core-js": "^3.8.3",
     "es6-promise-pool": "^2.5.0",
     "fs": "^0.0.1-security",
     "glob": "^7.1.6",
     "path": "^0.12.7",
     "regenerator-runtime": "^0.13.7",
-    "superagent": "^6.1.0",
-    "validate.js": "^0.13.1"
+    "superagent": "^6.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
