@@ -1,1 +1,72 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:!0});var _slicedToArray=function(){function a(a,b){var c=[],d=!0,e=!1,f=void 0;try{for(var g,h=a[Symbol.iterator]();!(d=(g=h.next()).done)&&(c.push(g.value),!(b&&c.length===b));d=!0);}catch(a){e=!0,f=a}finally{try{!d&&h['return']&&h['return']()}finally{if(e)throw f}}return c}return function(b,c){if(Array.isArray(b))return b;if(Symbol.iterator in Object(b))return a(b,c);throw new TypeError('Invalid attempt to destructure non-iterable instance')}}(),_createClass=function(){function a(a,b){for(var c,d=0;d<b.length;d++)c=b[d],c.enumerable=c.enumerable||!1,c.configurable=!0,'value'in c&&(c.writable=!0),Object.defineProperty(a,c.key,c)}return function(b,c,d){return c&&a(b.prototype,c),d&&a(b,d),b}}();function _asyncToGenerator(a){return function(){var b=a.apply(this,arguments);return new Promise(function(a,c){function d(e,f){try{var g=b[e](f),h=g.value}catch(a){return void c(a)}return g.done?void a(h):Promise.resolve(h).then(function(a){d('next',a)},function(a){d('throw',a)})}return d('next')})}}function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError('Cannot call a class as a function')}var superagent=require('superagent'),fs=require('fs'),glob=require('glob'),path=require('path'),PromisePool=require('es6-promise-pool'),BunnyUpload=function(){function a(b,c){var d=!!(2<arguments.length&&void 0!==arguments[2])&&arguments[2],e=3<arguments.length&&void 0!==arguments[3]?arguments[3]:'rex-cdn';_classCallCheck(this,a),this.key=b,this.concurrency=c,this.overwrite=d}return _createClass(a,[{key:'getAll',value:function getAll(a){return new Promise(function(b){glob('**/*',{cwd:a},function(a,c){b(c)})})}},{key:'get',value:function get(a,b,c){return superagent.get('https://la.storage.bunnycdn.com/'+a+'/'+b+'/'+c).set('AccessKey',this.key)}},{key:'put',value:function put(a,b,c,d){return superagent.put('https://la.storage.bunnycdn.com/'+a+'/'+b+'/'+c).send(d).set('AccessKey',this.key)}},{key:'upload',value:function(){var a=_asyncToGenerator(regeneratorRuntime.mark(function a(b,c,d){var e,f,g,h,i,j,k,l;return regeneratorRuntime.wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return e=b+'/'+c,f=c.split('/'),g=_slicedToArray(f,2),h=g[0],i=g[1],j=d+'/'+h,k=void 0,a.prev=4,a.next=7,this.get(this.storageZoneName,j,i);case 7:if(k=a.sent,console.log('Skipping: '+e),!(k&&this.overwrite)){a.next=13;break}return a.next=12,this.put(this.storageZoneName,j,i,l);case 12:k=a.sent;case 13:a.next=28;break;case 15:return a.prev=15,a.t0=a['catch'](4),l=fs.readFileSync(e),a.prev=18,a.next=21,this.put(this.storageZoneName,j,i,l);case 21:k=a.sent,a.next=28;break;case 24:a.prev=24,a.t1=a['catch'](18),console.log('FAILED: '+e),console.log(a.t1);case 28:return a.abrupt('return',!0);case 29:case'end':return a.stop();}},a,this,[[4,15],[18,24]])}));return function upload(){return a.apply(this,arguments)}}()},{key:'s2',value:function(){var a=_asyncToGenerator(regeneratorRuntime.mark(function a(b,c,d){var e,f,g,h,i;return regeneratorRuntime.wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.next=2,this.getAll(b);case 2:return e=a.sent,f=e.filter(function(a){return!fs.lstatSync(b+'/'+a).isDirectory()}),console.log(f),g=regeneratorRuntime.mark(function(){var a,d,e,h,i,j;return regeneratorRuntime.wrap(function(g){for(;;)switch(g.prev=g.next){case 0:a=!0,d=!1,e=void 0,g.prev=3,h=f[Symbol.iterator]();case 5:if(a=(i=h.next()).done){g.next=12;break}return j=i.value,g.next=9,this.upload(b,j,c);case 9:a=!0,g.next=5;break;case 12:g.next=18;break;case 14:g.prev=14,g.t0=g['catch'](3),d=!0,e=g.t0;case 18:g.prev=18,g.prev=19,!a&&h.return&&h.return();case 21:if(g.prev=21,!d){g.next=24;break}throw e;case 24:return g.finish(21);case 25:return g.finish(18);case 26:case'end':return g.stop();}},g,this,[[3,14,18,26],[19,,21,25]])}),h=g(),i=new PromisePool(h,d),a.abrupt('return',i.start().then(function(){return console.log('Complete')}));case 9:case'end':return a.stop();}},a,this)}));return function s2(){return a.apply(this,arguments)}}()}]),a}();exports.default=function(){var a=_asyncToGenerator(regeneratorRuntime.mark(function a(b,c,d,e){var f,g=!!(4<arguments.length&&arguments[4]!==void 0)&&arguments[4],h=5<arguments.length&&arguments[5]!==void 0?arguments[5]:'rex-cdn';return regeneratorRuntime.wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return f=new BunnyUpload(b,e,g),a.abrupt('return',f.s2(c,cdnPath,e));case 2:case'end':return a.stop();}},a,this)}));return function(){return a.apply(this,arguments)}}(),module.exports=exports.default;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = bunnyUpload;
+Object.defineProperty(exports, "BunnyUpload", {
+  enumerable: true,
+  get: function get() {
+    return _bunnyUpload2["default"];
+  }
+});
+
+require("core-js/stable");
+
+require("regenerator-runtime/runtime");
+
+var _validate = _interopRequireDefault(require("validate.js"));
+
+var _bunnyUploadParamConstraints = _interopRequireDefault(require("./validation/bunny-upload-param-constraints.js"));
+
+var _bunnyUpload2 = _interopRequireDefault(require("./classes/bunny-upload.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function bunnyUpload(_x) {
+  return _bunnyUpload.apply(this, arguments);
+}
+
+function _bunnyUpload() {
+  _bunnyUpload = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(options) {
+    var bunny;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            //just a funciton wrapper
+            (0, _validate["default"])(options, _bunnyUploadParamConstraints["default"]);
+
+            if (options.concurrency === undefined) {
+              options.concurrency = 10;
+            }
+
+            if (options.overwrite === undefined) {
+              options.overwrite = false;
+            }
+
+            if (options.overwrite === undefined) {
+              options.storageZoneName = 'rex-cdn'; //or better and env variable
+            }
+
+            console.log(options);
+            bunny = new _bunnyUpload2["default"](options.key, options.concurrency, options.overwrite, options.storageZoneName);
+            _context.next = 8;
+            return bunny.s2(options.localDir, options.cdnDir, options.concurrency);
+
+          case 8:
+            return _context.abrupt("return", _context.sent);
+
+          case 9:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _bunnyUpload.apply(this, arguments);
+}
