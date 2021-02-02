@@ -17,19 +17,11 @@ var _glob = _interopRequireDefault(require("glob"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -74,96 +66,85 @@ var BunnyUpload = /*#__PURE__*/function () {
   }, {
     key: "put",
     value: function put(storageZoneName, p2, fileName, buffer) {
-      console.log(storageZoneName);
-      console.log(p2);
-      console.log(fileName);
-      console.log(buffer);
-      console.log(this.key);
       return _superagent["default"].put("https://la.storage.bunnycdn.com/".concat(storageZoneName, "/").concat(p2, "/").concat(fileName)).set('AccessKey', this.key).send(buffer);
     }
   }, {
     key: "upload",
     value: function () {
       var _upload = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(localDir, file, cdnPath) {
-        var p, _file$split, _file$split2, subdir, fileName, p2, res, buffer;
-
+        var p, paths, fileName, subdirs, subdir, p2, res, buffer;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 p = "".concat(localDir, "/").concat(file);
-                _file$split = file.split('/'), _file$split2 = _slicedToArray(_file$split, 2), subdir = _file$split2[0], fileName = _file$split2[1];
-                p2 = "".concat(cdnPath, "/").concat(subdir);
-                console.log("File:");
-                console.log(file);
-                console.log("Split:");
-                console.log(file.split('/'));
-                console.log("Subdir:");
-                console.log(subdir);
-                console.log("Filename:");
-                console.log(fileName);
-                _context.prev = 11;
-                _context.next = 14;
+                paths = file.split('/');
+                fileName = paths.slice(-1)[0];
+                subdirs = file.split('/').slice(0, paths.length - 1);
+                subdir = subdirs.join('/');
+                p2 = subdirs.length > 0 ? "".concat(cdnPath, "/").concat(subdir) : "".concat(cdnPath, "/");
+                _context.prev = 6;
+                _context.next = 9;
                 return this.get(this.storageZoneName, p2, fileName);
 
-              case 14:
+              case 9:
                 res = _context.sent;
                 console.log("Skipping: ".concat(p));
 
                 if (!(res && this.overwrite)) {
-                  _context.next = 28;
+                  _context.next = 23;
                   break;
                 }
 
                 buffer = _fs["default"].readFileSync(p);
-                _context.prev = 18;
-                _context.next = 21;
+                _context.prev = 13;
+                _context.next = 16;
                 return this.put(this.storageZoneName, p2, fileName, buffer);
 
-              case 21:
+              case 16:
                 res = _context.sent;
-                _context.next = 28;
+                _context.next = 23;
                 break;
 
-              case 24:
-                _context.prev = 24;
-                _context.t0 = _context["catch"](18);
+              case 19:
+                _context.prev = 19;
+                _context.t0 = _context["catch"](13);
                 console.log('FAILED: ' + p);
                 console.log(_context.t0);
 
-              case 28:
-                _context.next = 43;
+              case 23:
+                _context.next = 38;
                 break;
 
-              case 30:
-                _context.prev = 30;
-                _context.t1 = _context["catch"](11);
+              case 25:
+                _context.prev = 25;
+                _context.t1 = _context["catch"](6);
                 // Not found, upload
                 buffer = _fs["default"].readFileSync(p);
-                _context.prev = 33;
-                _context.next = 36;
+                _context.prev = 28;
+                _context.next = 31;
                 return this.put(this.storageZoneName, p2, fileName, buffer);
 
-              case 36:
+              case 31:
                 res = _context.sent;
-                _context.next = 43;
+                _context.next = 38;
                 break;
 
-              case 39:
-                _context.prev = 39;
-                _context.t2 = _context["catch"](33);
+              case 34:
+                _context.prev = 34;
+                _context.t2 = _context["catch"](28);
                 console.log('FAILED: ' + p);
                 console.log(_context.t2);
 
-              case 43:
+              case 38:
                 return _context.abrupt("return", true);
 
-              case 44:
+              case 39:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[11, 30], [18, 24], [33, 39]]);
+        }, _callee, this, [[6, 25], [13, 19], [28, 34]]);
       }));
 
       function upload(_x, _x2, _x3) {
@@ -227,7 +208,7 @@ var BunnyUpload = /*#__PURE__*/function () {
   }, {
     key: "s2",
     value: function () {
-      var _s2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(localDir, cdnPath, concurrency) {
+      var _s = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(localDir, cdnPath, concurrency) {
         var files, toUpload, promiseIterator, pool;
         return regeneratorRuntime.wrap(function _callee2$(_context3) {
           while (1) {
@@ -242,14 +223,13 @@ var BunnyUpload = /*#__PURE__*/function () {
                   var p = "".concat(localDir, "/").concat(f);
                   return !_fs["default"].lstatSync(p).isDirectory();
                 });
-                console.log(toUpload);
                 promiseIterator = this.generatePromises(toUpload, localDir, cdnPath);
                 pool = new _es6PromisePool["default"](promiseIterator, concurrency);
                 return _context3.abrupt("return", pool.start().then(function () {
                   return console.log('Complete');
                 }));
 
-              case 8:
+              case 7:
               case "end":
                 return _context3.stop();
             }
@@ -258,7 +238,7 @@ var BunnyUpload = /*#__PURE__*/function () {
       }));
 
       function s2(_x4, _x5, _x6) {
-        return _s2.apply(this, arguments);
+        return _s.apply(this, arguments);
       }
 
       return s2;

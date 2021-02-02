@@ -53,15 +53,14 @@ function _bunnyUpload() {
               options.storageZoneName = 'rex-cdn'; //or better and env variable
             }
 
-            console.log(options);
             bunny = new _bunnyUpload2["default"](options.key, options.concurrency, options.overwrite, options.storageZoneName);
-            _context.next = 8;
+            _context.next = 7;
             return bunny.s2(options.localDir, options.cdnDir, options.concurrency);
 
-          case 8:
+          case 7:
             return _context.abrupt("return", _context.sent);
 
-          case 9:
+          case 8:
           case "end":
             return _context.stop();
         }
