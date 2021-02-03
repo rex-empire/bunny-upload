@@ -86,6 +86,13 @@ export default class BunnyUpload {
 	}
 
 	purgeFile(cdnUrl){
+
+		//TODO: actually build this functionality out (cdn endpoint in by param)
+		// https://la.storage.bunnycdn.com/rex-cdn
+		// https://rexcdn.b-cdn.net
+		cdnUrl = cdnUrl.replace(/la.storage.bunnycdn.com\/rex-cdn/gi, 'rexcdn.b-cdn.net')
+		console.log(`Purging: ${cdnUrl}`);
+		
 		return superagent
 		        .post("https://bunnycdn.com/api/purge")
 		        .set('AccessKey', this.key)
