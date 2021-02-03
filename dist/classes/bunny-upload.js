@@ -205,6 +205,11 @@ var BunnyUpload = /*#__PURE__*/function () {
   }, {
     key: "purgeFile",
     value: function purgeFile(cdnUrl) {
+      //TODO: actually build this functionality out (cdn endpoint in by param)
+      // https://la.storage.bunnycdn.com/rex-cdn
+      // https://rexcdn.b-cdn.net
+      cdnUrl = cdnUrl.replace(/la.storage.bunnycdn.com\/rex-cdn/gi, 'rexcdn.b-cdn.net');
+      console.log("Purging: ".concat(cdnUrl));
       return _superagent["default"].post("https://bunnycdn.com/api/purge").set('AccessKey', this.key).send({
         url: cdnUrl
       });

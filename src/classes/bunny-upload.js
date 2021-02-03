@@ -92,7 +92,7 @@ export default class BunnyUpload {
 		// https://rexcdn.b-cdn.net
 		cdnUrl = cdnUrl.replace(/la.storage.bunnycdn.com\/rex-cdn/gi, 'rexcdn.b-cdn.net')
 		console.log(`Purging: ${cdnUrl}`);
-		
+
 		return superagent
 		        .post("https://bunnycdn.com/api/purge")
 		        .set('AccessKey', this.key)
