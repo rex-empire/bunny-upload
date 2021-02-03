@@ -82,7 +82,7 @@ var BunnyUpload = /*#__PURE__*/function () {
                 fileName = paths.slice(-1)[0];
                 subdirs = file.split('/').slice(0, paths.length - 1);
                 subdir = subdirs.join('/');
-                p2 = subdirs.length > 0 ? "".concat(cdnPath, "/").concat(subdir) : "".concat(cdnPath, "/");
+                p2 = subdirs.length > 0 ? "".concat(cdnPath, "/").concat(subdir) : "".concat(cdnPath);
                 _context.prev = 6;
                 _context.next = 9;
                 return this.get(this.storageZoneName, p2, fileName);
@@ -91,7 +91,7 @@ var BunnyUpload = /*#__PURE__*/function () {
                 res = _context.sent;
 
                 if (!this.overwrite) {
-                  _context.next = 25;
+                  _context.next = 26;
                   break;
                 }
 
@@ -103,56 +103,58 @@ var BunnyUpload = /*#__PURE__*/function () {
 
               case 16:
                 res = _context.sent;
-                _context.next = 23;
+                this.purge(res.request.url);
+                _context.next = 24;
                 break;
 
-              case 19:
-                _context.prev = 19;
+              case 20:
+                _context.prev = 20;
                 _context.t0 = _context["catch"](13);
                 console.log('FAILED: ' + p);
                 console.log(_context.t0);
 
-              case 23:
-                _context.next = 26;
+              case 24:
+                _context.next = 27;
                 break;
-
-              case 25:
-                console.log("Skipping: ".concat(p));
 
               case 26:
-                _context.next = 42;
+                console.log("Skipping: ".concat(p));
+
+              case 27:
+                _context.next = 44;
                 break;
 
-              case 28:
-                _context.prev = 28;
+              case 29:
+                _context.prev = 29;
                 _context.t1 = _context["catch"](6);
                 // Not found, upload
                 buffer = _fs["default"].readFileSync(p);
                 console.log("Uploading: ".concat(p));
-                _context.prev = 32;
-                _context.next = 35;
+                _context.prev = 33;
+                _context.next = 36;
                 return this.put(this.storageZoneName, p2, fileName, buffer);
 
-              case 35:
+              case 36:
                 res = _context.sent;
-                _context.next = 42;
+                this.purge(res.request.url);
+                _context.next = 44;
                 break;
 
-              case 38:
-                _context.prev = 38;
-                _context.t2 = _context["catch"](32);
+              case 40:
+                _context.prev = 40;
+                _context.t2 = _context["catch"](33);
                 console.log('FAILED: ' + p);
                 console.log(_context.t2);
 
-              case 42:
+              case 44:
                 return _context.abrupt("return", true);
 
-              case 43:
+              case 45:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[6, 28], [13, 19], [32, 38]]);
+        }, _callee, this, [[6, 29], [13, 20], [33, 40]]);
       }));
 
       function upload(_x, _x2, _x3) {
@@ -162,53 +164,99 @@ var BunnyUpload = /*#__PURE__*/function () {
       return upload;
     }()
   }, {
+    key: "purge",
+    value: function () {
+      var _purge = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cdnUrl) {
+        var res;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                console.log("Purging file: ".concat(cdnUrl));
+                _context2.prev = 1;
+                _context2.next = 4;
+                return this.purgeFile(cdnUrl);
+
+              case 4:
+                res = _context2.sent;
+                _context2.next = 11;
+                break;
+
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](1);
+                console.log('FAILED: ' + p);
+                console.log(_context2.t0);
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[1, 7]]);
+      }));
+
+      function purge(_x4) {
+        return _purge.apply(this, arguments);
+      }
+
+      return purge;
+    }()
+  }, {
+    key: "purgeFile",
+    value: function purgeFile(cdnUrl) {
+      return _superagent["default"].post("https://bunnycdn.com/api/purge").set('AccessKey', this.key).send({
+        url: cdnUrl
+      });
+    }
+  }, {
     key: "generatePromises",
     value: /*#__PURE__*/regeneratorRuntime.mark(function generatePromises(toUpload, localDir, cdnPath) {
       var _iterator, _step, file;
 
-      return regeneratorRuntime.wrap(function generatePromises$(_context2) {
+      return regeneratorRuntime.wrap(function generatePromises$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
               _iterator = _createForOfIteratorHelper(toUpload);
-              _context2.prev = 1;
+              _context3.prev = 1;
 
               _iterator.s();
 
             case 3:
               if ((_step = _iterator.n()).done) {
-                _context2.next = 9;
+                _context3.next = 9;
                 break;
               }
 
               file = _step.value;
-              _context2.next = 7;
+              _context3.next = 7;
               return this.upload(localDir, file, cdnPath);
 
             case 7:
-              _context2.next = 3;
+              _context3.next = 3;
               break;
 
             case 9:
-              _context2.next = 14;
+              _context3.next = 14;
               break;
 
             case 11:
-              _context2.prev = 11;
-              _context2.t0 = _context2["catch"](1);
+              _context3.prev = 11;
+              _context3.t0 = _context3["catch"](1);
 
-              _iterator.e(_context2.t0);
+              _iterator.e(_context3.t0);
 
             case 14:
-              _context2.prev = 14;
+              _context3.prev = 14;
 
               _iterator.f();
 
-              return _context2.finish(14);
+              return _context3.finish(14);
 
             case 17:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
       }, generatePromises, this, [[1, 11, 14, 17]]);
@@ -216,36 +264,36 @@ var BunnyUpload = /*#__PURE__*/function () {
   }, {
     key: "s2",
     value: function () {
-      var _s = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(localDir, cdnPath, concurrency) {
+      var _s = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(localDir, cdnPath, concurrency) {
         var files, toUpload, promiseIterator, pool;
-        return regeneratorRuntime.wrap(function _callee2$(_context3) {
+        return regeneratorRuntime.wrap(function _callee3$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
-                _context3.next = 2;
+                _context4.next = 2;
                 return this.getAll(localDir);
 
               case 2:
-                files = _context3.sent;
+                files = _context4.sent;
                 toUpload = files.filter(function (f) {
                   var p = "".concat(localDir, "/").concat(f);
                   return !_fs["default"].lstatSync(p).isDirectory();
                 });
                 promiseIterator = this.generatePromises(toUpload, localDir, cdnPath);
                 pool = new _es6PromisePool["default"](promiseIterator, concurrency);
-                return _context3.abrupt("return", pool.start().then(function () {
+                return _context4.abrupt("return", pool.start().then(function () {
                   return console.log('Complete');
                 }));
 
               case 7:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
-      function s2(_x4, _x5, _x6) {
+      function s2(_x5, _x6, _x7) {
         return _s.apply(this, arguments);
       }
 
