@@ -29,11 +29,6 @@ export default class BunnyUpload {
 	}
 
  	put(storageZoneName, p2, fileName, buffer) {
- 		console.log(storageZoneName);
- 		console.log(p2);
- 		console.log(fileName);
- 		console.log(buffer);
- 		console.log(this.key);
 	    return superagent
 	        .put(`https://la.storage.bunnycdn.com/${storageZoneName}/${p2}/${fileName}`)
 	        .set('AccessKey', this.key)
@@ -42,18 +37,12 @@ export default class BunnyUpload {
 
 	async upload(localDir, file, cdnPath) {
 	    let p = `${localDir}/${file}`;
-	    let [subdir, fileName] = file.split('/');
-	    let p2 = `${cdnPath}/${subdir}`;
+	    let paths = file.split('/');
+	    let fileName = paths.slice(-1)[0];
+	    let subdirs = file.split('/').slice(0, paths.length - 1);
+	    let subdir = subdirs.join('/');
+	    let p2 = subdirs.length > 0 ? `${cdnPath}/${subdir}` : `${cdnPath}/`;
 	    let res;
-
-	    console.log("File:");
-	    console.log(file);
-	    console.log("Split:");
-	    console.log(file.split('/'));
-	    console.log("Subdir:");
-	    console.log(subdir);
-	    console.log("Filename:");
-	    console.log(fileName);
 
 	    try {
 	        res = await this.get(this.storageZoneName, p2, fileName)
@@ -94,8 +83,6 @@ export default class BunnyUpload {
 	        let p = `${localDir}/${f}`;
 	        return !fs.lstatSync(p).isDirectory();
 	    });
-
-	    console.log(toUpload);
 
 	    const promiseIterator = this.generatePromises(toUpload, localDir, cdnPath);
 
