@@ -227,6 +227,7 @@ var BunnyUpload = /*#__PURE__*/function () {
   }, {
     key: "performPurge",
     value: function performPurge(cdnUrl) {
+      //TODO: actually build this functionality out (cdn endpoint in by param)
       return _superagent["default"].post("https://bunnycdn.com/api/purge").set('AccessKey', this.apiKey).query({
         url: cdnUrl
       });

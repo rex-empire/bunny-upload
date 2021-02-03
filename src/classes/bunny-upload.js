@@ -90,6 +90,7 @@ export default class BunnyUpload {
 	}
 
 	performPurge(cdnUrl){
+		//TODO: actually build this functionality out (cdn endpoint in by param)
 		return superagent
 		        .post("https://bunnycdn.com/api/purge")
 		        .set('AccessKey', this.apiKey)
