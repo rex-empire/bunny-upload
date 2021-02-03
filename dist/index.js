@@ -38,7 +38,7 @@ function _bunnyUpload() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            //just a funciton wrapper
+            //just a function wrapper
             (0, _validate["default"])(options, _bunnyUploadParamConstraints["default"]);
 
             if (options.concurrency === undefined) {
@@ -50,17 +50,25 @@ function _bunnyUpload() {
             }
 
             if (options.overwrite === undefined) {
-              options.storageZoneName = 'rex-cdn'; //or better and env variable
+              options.storageZoneName = 'rex-cdn';
             }
 
-            bunny = new _bunnyUpload2["default"](options.key, options.concurrency, options.overwrite, options.storageZoneName);
-            _context.next = 7;
+            if (options.storageZoneUrl === undefined) {
+              options.storageZoneUrl = 'https://la.storage.bunnycdn.com';
+            }
+
+            if (options.purgeUrl === undefined) {
+              options.purgeUrl = 'https://rexcdn.b-cdn.net';
+            }
+
+            bunny = new _bunnyUpload2["default"](options.key, options.apiKey, options.concurrency, options.overwrite, options.storageZoneName, options.storageZoneUrl, options.purgeUrl);
+            _context.next = 9;
             return bunny.s2(options.localDir, options.cdnDir, options.concurrency);
 
-          case 7:
+          case 9:
             return _context.abrupt("return", _context.sent);
 
-          case 8:
+          case 10:
           case "end":
             return _context.stop();
         }

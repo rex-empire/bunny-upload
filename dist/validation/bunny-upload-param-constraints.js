@@ -9,6 +9,10 @@ var constraints = {
     presence: true,
     type: "string"
   },
+  apiKey: {
+    presence: true,
+    type: "string"
+  },
   localDir: {
     presence: true,
     type: "string"
@@ -24,6 +28,12 @@ var constraints = {
     type: "boolean"
   },
   storageZoneName: {
+    type: "string"
+  },
+  storageZoneUrl: {
+    type: "string"
+  },
+  purgeUrl: {
     type: "string"
   }
 };
