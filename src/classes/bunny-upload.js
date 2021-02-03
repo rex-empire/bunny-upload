@@ -46,8 +46,8 @@ export default class BunnyUpload {
 
 	    try {
 	        res = await this.get(this.storageZoneName, p2, fileName)
-	        console.log(`Skipping: ${p}`);
-	        if(res && this.overwrite){
+	        if(this.overwrite){
+	        	console.log(`Uploading: ${p}`);
 				var buffer = fs.readFileSync(p);
 				try {
 					res = await this.put(this.storageZoneName, p2, fileName, buffer);
@@ -55,10 +55,13 @@ export default class BunnyUpload {
 					console.log('FAILED: ' + p);
 					console.log(e);
 				}
+	        }else{
+	        	console.log(`Skipping: ${p}`);
 	        }
 	    } catch (e) {
 	        // Not found, upload
 	        var buffer = fs.readFileSync(p);
+	        console.log(`Uploading: ${p}`);
 	        try {
 	            res = await this.put(this.storageZoneName, p2, fileName, buffer);
 	        } catch (e) {

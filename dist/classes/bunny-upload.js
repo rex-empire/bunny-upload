@@ -89,13 +89,13 @@ var BunnyUpload = /*#__PURE__*/function () {
 
               case 9:
                 res = _context.sent;
-                console.log("Skipping: ".concat(p));
 
-                if (!(res && this.overwrite)) {
-                  _context.next = 23;
+                if (!this.overwrite) {
+                  _context.next = 25;
                   break;
                 }
 
+                console.log("Uploading: ".concat(p));
                 buffer = _fs["default"].readFileSync(p);
                 _context.prev = 13;
                 _context.next = 16;
@@ -113,38 +113,46 @@ var BunnyUpload = /*#__PURE__*/function () {
                 console.log(_context.t0);
 
               case 23:
-                _context.next = 38;
+                _context.next = 26;
                 break;
 
               case 25:
-                _context.prev = 25;
+                console.log("Skipping: ".concat(p));
+
+              case 26:
+                _context.next = 42;
+                break;
+
+              case 28:
+                _context.prev = 28;
                 _context.t1 = _context["catch"](6);
                 // Not found, upload
                 buffer = _fs["default"].readFileSync(p);
-                _context.prev = 28;
-                _context.next = 31;
+                console.log("Uploading: ".concat(p));
+                _context.prev = 32;
+                _context.next = 35;
                 return this.put(this.storageZoneName, p2, fileName, buffer);
 
-              case 31:
+              case 35:
                 res = _context.sent;
-                _context.next = 38;
+                _context.next = 42;
                 break;
 
-              case 34:
-                _context.prev = 34;
-                _context.t2 = _context["catch"](28);
+              case 38:
+                _context.prev = 38;
+                _context.t2 = _context["catch"](32);
                 console.log('FAILED: ' + p);
                 console.log(_context.t2);
 
-              case 38:
+              case 42:
                 return _context.abrupt("return", true);
 
-              case 39:
+              case 43:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[6, 25], [13, 19], [28, 34]]);
+        }, _callee, this, [[6, 28], [13, 19], [32, 38]]);
       }));
 
       function upload(_x, _x2, _x3) {

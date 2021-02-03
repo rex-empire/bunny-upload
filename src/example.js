@@ -2,10 +2,10 @@ import bunnyUpload from './index.js';
 
 let res = bunnyUpload({
     key: "4a15bce9-7e5d-4a92-ab57674d36f6-a966-46bc",
-    localDir: '/Users/diegoponciano/Desktop/ryan/test-images',
-    cdnDir: 'tipsy/transcoded',
+    localDir: '/home/diego/Desktop/ryan/test-images',
+    cdnDir: 'test-1',
     concurrency: 2,
-    overwrite: false,
+    overwrite: true,
     storageZoneName: 'diego-test'
 });
 
