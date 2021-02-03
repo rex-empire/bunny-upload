@@ -41,7 +41,7 @@ export default class BunnyUpload {
 	    let fileName = paths.slice(-1)[0];
 	    let subdirs = file.split('/').slice(0, paths.length - 1);
 	    let subdir = subdirs.join('/');
-	    let p2 = subdirs.length > 0 ? `${cdnPath}/${subdir}` : `${cdnPath}/`;
+	    let p2 = subdirs.length > 0 ? `${cdnPath}/${subdir}` : `${cdnPath}`;
 	    let res;
 
 	    try {
@@ -51,6 +51,7 @@ export default class BunnyUpload {
 				var buffer = fs.readFileSync(p);
 				try {
 					res = await this.put(this.storageZoneName, p2, fileName, buffer);
+					this.purge(res.request.url);
 				} catch (e) {
 					console.log('FAILED: ' + p);
 					console.log(e);
@@ -64,12 +65,31 @@ export default class BunnyUpload {
 	        console.log(`Uploading: ${p}`);
 	        try {
 	            res = await this.put(this.storageZoneName, p2, fileName, buffer);
+				this.purge(res.request.url);
 	        } catch (e) {
 	            console.log('FAILED: ' + p);
 	            console.log(e);
 	        }
 	    }
 	    return true;
+	}
+
+	async purge(cdnUrl){
+		console.log(`Purging file: ${cdnUrl}`);
+		let res;
+		try {
+		    res = await this.purgeFile(cdnUrl);
+        } catch (e) {
+            console.log('FAILED: ' + p);
+            console.log(e);
+        }
+	}
+
+	purgeFile(cdnUrl){
+		return superagent
+		        .post("https://bunnycdn.com/api/purge")
+		        .set('AccessKey', this.key)
+		        .send({url: cdnUrl});
 	}
 
 	* generatePromises(toUpload, localDir, cdnPath){

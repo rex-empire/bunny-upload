@@ -1,4 +1,5 @@
 import bunnyUpload from './index.js';
+import BunnyUpload from './classes/bunny-upload.js';
 
 let res = bunnyUpload({
     key: "4a15bce9-7e5d-4a92-ab57674d36f6-a966-46bc",
@@ -10,4 +11,7 @@ let res = bunnyUpload({
 });
 
 
+// var bu = new BunnyUpload();
+
+// console.log();
 
