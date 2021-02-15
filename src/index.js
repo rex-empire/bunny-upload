@@ -5,8 +5,8 @@ import constraints from './validation/bunny-upload-param-constraints.js';
 import BunnyUpload from './classes/bunny-upload.js';
 
 export default async function bunnyUpload(options){
+	//just a function wrapper
 
-	//just a funciton wrapper
 	validate(options, constraints);
 
 	if(options.concurrency === undefined){
@@ -18,10 +18,27 @@ export default async function bunnyUpload(options){
 	}
 
 	if(options.overwrite === undefined){
-		options.storageZoneName = 'rex-cdn'; //or better and env variable
+		options.storageZoneName = 'rex-cdn';
 	}
 
-	var bunny = new BunnyUpload(options.key, options.concurrency, options.overwrite, options.storageZoneName);
+	if(options.storageZoneUrl === undefined){
+		options.storageZoneUrl = 'https://la.storage.bunnycdn.com';
+	}
+
+	if(options.purgeUrl === undefined){
+		options.purgeUrl = 'https://rexcdn.b-cdn.net';
+	}
+
+	var bunny = new BunnyUpload(
+								options.key,
+								options.apiKey,
+								options.concurrency, 
+								options.overwrite, 
+								options.storageZoneName,
+								options.storageZoneUrl,
+								options.purgeUrl
+							);
+
 	return await bunny.s2(options.localDir, options.cdnDir, options.concurrency);
 }
 

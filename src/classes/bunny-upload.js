@@ -3,13 +3,19 @@ import fs from 'fs';
 import path from 'path';
 import PromisePool from 'es6-promise-pool';
 import glob from 'glob';
+import chalk from 'chalk';
 
 export default class BunnyUpload {
-	constructor(key, concurrency = 10, overwrite = false, storageZoneName = 'rex-cdn') {
+	constructor(key, apiKey, concurrency = 10, overwrite = false, 
+		storageZoneName = 'rex-cdn', storageZoneUrl = 'https://la.storage.bunnycdn.com', 
+		purgeUrl = 'https://rexcdn.b-cdn.net') {
 		this.key = key;
+		this.apiKey = apiKey;
 		this.concurrency = concurrency;
 		this.overwrite = overwrite;
 		this.storageZoneName = storageZoneName;
+		this.storageZoneUrl = storageZoneUrl;
+		this.purgeUrl = purgeUrl;
 	}
 
 	getAll(cwd) {
@@ -24,15 +30,28 @@ export default class BunnyUpload {
 
 	get(storageZoneName, p2, fileName) {
 	    return superagent
-	        .get(`https://la.storage.bunnycdn.com/${storageZoneName}/${p2}/${fileName}`)
+	        .get(`${this.storageZoneUrl}/${storageZoneName}/${p2}/${fileName}`)
 	        .set('AccessKey', this.key);
 	}
 
  	put(storageZoneName, p2, fileName, buffer) {
 	    return superagent
-	        .put(`https://la.storage.bunnycdn.com/${storageZoneName}/${p2}/${fileName}`)
+	        .put(`${this.storageZoneUrl}/${storageZoneName}/${p2}/${fileName}`)
 	        .set('AccessKey', this.key)
 	        .send(buffer);
+	}
+
+	async performUpload(p2, fileName, p){
+		console.log(chalk.blue(`UPLOADING: ${p}`));
+		try {
+			var buffer = fs.readFileSync(p);
+			await this.put(this.storageZoneName, p2, fileName, buffer);
+			console.log(chalk.blue(`UPLOADED SUCCESSFULLY: ${p}`));
+			await this.purge(`${this.purgeUrl}/${p2}/${fileName}`);
+		} catch (e) {
+			console.log(chalk.red('FAILED UPLOADING:'+ p));
+			console.log(chalk.red(e.message));
+		}
 	}
 
 	async upload(localDir, file, cdnPath) {
@@ -47,56 +66,35 @@ export default class BunnyUpload {
 	    try {
 	        res = await this.get(this.storageZoneName, p2, fileName)
 	        if(this.overwrite){
-	        	console.log(`Uploading: ${p}`);
-				var buffer = fs.readFileSync(p);
-				try {
-					res = await this.put(this.storageZoneName, p2, fileName, buffer);
-					this.purge(res.request.url);
-				} catch (e) {
-					console.log('FAILED: ' + p);
-					console.log(e);
-				}
+				await this.performUpload(p2, fileName, p);
 	        }else{
-	        	console.log(`Skipping: ${p}`);
+	        	console.log(chalk.red(`SKIPPING: ${p}`));
 	        }
 	    } catch (e) {
 	        // Not found, upload
-	        var buffer = fs.readFileSync(p);
-	        console.log(`Uploading: ${p}`);
-	        try {
-	            res = await this.put(this.storageZoneName, p2, fileName, buffer);
-				this.purge(res.request.url);
-	        } catch (e) {
-	            console.log('FAILED: ' + p);
-	            console.log(e);
-	        }
+			await this.performUpload(p2, fileName, p);
 	    }
 	    return true;
 	}
 
 	async purge(cdnUrl){
-		console.log(`Purging file: ${cdnUrl}`);
-		let res;
+		// console.log(p2);
+		console.log(chalk.green(`PURGING FILE AT: ${cdnUrl}`));
 		try {
-		    res = await this.purgeFile(cdnUrl);
+		    var res = await this.performPurge(cdnUrl);
+		    console.log(chalk.green(`PURGED SUCCESSFULLY: ${cdnUrl}`));
         } catch (e) {
-            console.log('FAILED: ' + p);
-            console.log(e);
+            console.log(chalk.red('FAILED PURGING:'+ cdnUrl));
+            console.log(chalk.red(e.message));
         }
 	}
 
-	purgeFile(cdnUrl){
-
+	performPurge(cdnUrl){
 		//TODO: actually build this functionality out (cdn endpoint in by param)
-		// https://la.storage.bunnycdn.com/rex-cdn
-		// https://rexcdn.b-cdn.net
-		cdnUrl = cdnUrl.replace(/la.storage.bunnycdn.com\/rex-cdn/gi, 'rexcdn.b-cdn.net')
-		console.log(`Purging: ${cdnUrl}`);
-
 		return superagent
 		        .post("https://bunnycdn.com/api/purge")
-		        .set('AccessKey', this.key)
-		        .send({url: cdnUrl});
+		        .set('AccessKey', this.apiKey)
+		        .query({url: cdnUrl});
 	}
 
 	* generatePromises(toUpload, localDir, cdnPath){
@@ -119,7 +117,7 @@ export default class BunnyUpload {
 	    const pool = new PromisePool(promiseIterator, concurrency);
 
 	    return pool.start()
-	        .then(() => console.log('Complete'));
+	        .then(() => console.log(chalk.green('FINISHED UPLOADING JOBS')));
 
 	}
 }
