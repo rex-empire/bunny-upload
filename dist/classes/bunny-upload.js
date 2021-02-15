@@ -122,7 +122,7 @@ var BunnyUpload = /*#__PURE__*/function () {
                   break;
                 }
 
-                localDirBackupBuffer = _fsExtra["default"].readFileSync(".bunny-upload/".concat(p));
+                localDirBackupBuffer = _fsExtra["default"].readFileSync(".bunny-upload/backup/".concat(p));
                 notChanged = buffer.equals(localDirBackupBuffer); // Checks if the /dist file has the same contents as the backup
 
                 if (!(notChanged != false)) {
@@ -354,10 +354,10 @@ var BunnyUpload = /*#__PURE__*/function () {
         var made = _mkdirp["default"].sync('.bunny-upload'); // Ensure the folder exists
 
 
-        _fsExtra["default"].emptyDirSync('.bunny-upload/dist'); // Delete the backup files
+        _fsExtra["default"].emptyDirSync(".bunny-upload/backup/".concat(localDir)); // Delete the backup files
 
 
-        _fsExtra["default"].copySync(localDir, '.bunny-upload/dist', {
+        _fsExtra["default"].copySync(localDir, ".bunny-upload/backup/".concat(localDir), {
           overwrite: true
         }); // Create the backup
 
@@ -392,7 +392,7 @@ var BunnyUpload = /*#__PURE__*/function () {
                 }
 
                 _context6.next = 7;
-                return this.getAllFiles('.bunny-upload/dist');
+                return this.getAllFiles(".bunny-upload/backup/".concat(localDir));
 
               case 7:
                 localDirBackupFiles = _context6.sent;

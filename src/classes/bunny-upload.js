@@ -48,7 +48,7 @@ export default class BunnyUpload {
 	async readFileAndPut(p, p2, fileName, hasBackupFile) {
 		let buffer = fs.readFileSync(p);
 		if(hasBackupFile){
-			let localDirBackupBuffer = fs.readFileSync(`.bunny-upload/${p}`);
+			let localDirBackupBuffer = fs.readFileSync(`.bunny-upload/backup/${p}`);
 			let notChanged = buffer.equals(localDirBackupBuffer); // Checks if the /dist file has the same contents as the backup
 			if(notChanged != false){
 				return;
@@ -132,8 +132,8 @@ export default class BunnyUpload {
 	storeLocalDirBackup(localDir) {
 		try {
 			const made = mkdirp.sync('.bunny-upload'); // Ensure the folder exists
-			fs.emptyDirSync('.bunny-upload/dist'); // Delete the backup files
-			fs.copySync(localDir, '.bunny-upload/dist', { overwrite: true }); // Create the backup
+			fs.emptyDirSync(`.bunny-upload/backup/${localDir}`); // Delete the backup files
+			fs.copySync(localDir, `.bunny-upload/backup/${localDir}`, { overwrite: true }); // Create the backup
 		} catch (err) {
 			// If this ever fails it probably doesn't need fixing
 			return err;
@@ -146,7 +146,7 @@ export default class BunnyUpload {
 
 		let localDirBackupFiles = false;
 		if (this.onlyChanged === true) {
-			localDirBackupFiles = await this.getAllFiles('.bunny-upload/dist');
+			localDirBackupFiles = await this.getAllFiles(`.bunny-upload/backup/${localDir}`);
 		}
 
 		const promiseIterator = this.generatePromises(toUpload, localDirBackupFiles, localDir, cdnPath);
