@@ -7,7 +7,8 @@ let res = bunnyUpload({
     cdnDir: 'test-1',
     concurrency: 2,
     overwrite: true,
-    storageZoneName: 'diego-test'
+    storageZoneName: 'diego-test',
+	onlyChanged: true
 });
 
 

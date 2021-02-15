@@ -53,14 +53,18 @@ function _bunnyUpload() {
               options.storageZoneName = 'rex-cdn'; //or better and env variable
             }
 
-            bunny = new _bunnyUpload2["default"](options.key, options.concurrency, options.overwrite, options.storageZoneName);
-            _context.next = 7;
+            if (options.onlyChanged === undefined) {
+              options.onlyChanged = false; // Uploads only new files to bunny when true
+            }
+
+            bunny = new _bunnyUpload2["default"](options.key, options.concurrency, options.overwrite, options.storageZoneName, options.onlyChanged);
+            _context.next = 8;
             return bunny.s2(options.localDir, options.cdnDir, options.concurrency);
 
-          case 7:
+          case 8:
             return _context.abrupt("return", _context.sent);
 
-          case 8:
+          case 9:
           case "end":
             return _context.stop();
         }

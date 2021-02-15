@@ -21,7 +21,11 @@ export default async function bunnyUpload(options){
 		options.storageZoneName = 'rex-cdn'; //or better and env variable
 	}
 
-	var bunny = new BunnyUpload(options.key, options.concurrency, options.overwrite, options.storageZoneName);
+	if(options.onlyChanged === undefined){
+		options.onlyChanged = false; // Uploads only new files to bunny when true
+	}
+
+	var bunny = new BunnyUpload(options.key, options.concurrency, options.overwrite, options.storageZoneName, options.onlyChanged);
 	return await bunny.s2(options.localDir, options.cdnDir, options.concurrency);
 }
 

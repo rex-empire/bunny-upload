@@ -12,6 +12,7 @@ var res = (0, _index["default"])({
   cdnDir: 'test-1',
   concurrency: 2,
   overwrite: true,
-  storageZoneName: 'diego-test'
+  storageZoneName: 'diego-test',
+  onlyChanged: true
 }); // var bu = new BunnyUpload();
 // console.log();
