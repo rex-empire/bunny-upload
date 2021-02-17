@@ -29,6 +29,10 @@ export default async function bunnyUpload(options){
 		options.purgeUrl = 'https://rexcdn.b-cdn.net';
 	}
 
+	if(options.onlyChanged === undefined){
+		options.onlyChanged = false; // Uploads only new files to bunny when true
+	}
+
 	var bunny = new BunnyUpload(
 								options.key,
 								options.apiKey,
@@ -36,7 +40,8 @@ export default async function bunnyUpload(options){
 								options.overwrite, 
 								options.storageZoneName,
 								options.storageZoneUrl,
-								options.purgeUrl
+								options.purgeUrl,
+								options.onlyChanged
 							);
 
 	return await bunny.s2(options.localDir, options.cdnDir, options.concurrency);
