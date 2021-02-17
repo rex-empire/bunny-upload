@@ -11,6 +11,7 @@ let res = bunnyUpload({
     storageZoneName: 'diego-test',
     storageZoneUrl: 'https://la.storage.bunnycdn.com',
     purgeUrl: 'https://poncianodiegotest.b-cdn.net',
+	onlyChanged: true
 });
 
 //poncianodiegotest.b-cdn.net

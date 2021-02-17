@@ -61,14 +61,18 @@ function _bunnyUpload() {
               options.purgeUrl = 'https://rexcdn.b-cdn.net';
             }
 
-            bunny = new _bunnyUpload2["default"](options.key, options.apiKey, options.concurrency, options.overwrite, options.storageZoneName, options.storageZoneUrl, options.purgeUrl);
-            _context.next = 9;
+            if (options.onlyChanged === undefined) {
+              options.onlyChanged = false; // Uploads only new files to bunny when true
+            }
+
+            bunny = new _bunnyUpload2["default"](options.key, options.apiKey, options.concurrency, options.overwrite, options.storageZoneName, options.storageZoneUrl, options.purgeUrl, options.onlyChanged);
+            _context.next = 10;
             return bunny.s2(options.localDir, options.cdnDir, options.concurrency);
 
-          case 9:
+          case 10:
             return _context.abrupt("return", _context.sent);
 
-          case 10:
+          case 11:
           case "end":
             return _context.stop();
         }

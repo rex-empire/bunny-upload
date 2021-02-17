@@ -15,7 +15,8 @@ var res = (0, _index["default"])({
   overwrite: true,
   storageZoneName: 'diego-test',
   storageZoneUrl: 'https://la.storage.bunnycdn.com',
-  purgeUrl: 'https://poncianodiegotest.b-cdn.net'
+  purgeUrl: 'https://poncianodiegotest.b-cdn.net',
+  onlyChanged: true
 }); //poncianodiegotest.b-cdn.net
 // var bu = new BunnyUpload('4a15bce9-7e5d-4a92-ab57674d36f6-a966-46bc', '4a15bce9-7e5d-4a92-ab57674d36f6-a966-46bc', 'test-1');
 // console.log();
