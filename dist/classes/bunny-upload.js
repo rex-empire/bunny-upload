@@ -56,6 +56,7 @@ var BunnyUpload = /*#__PURE__*/function () {
     this.storageZoneUrl = storageZoneUrl;
     this.purgeUrl = purgeUrl;
     this.onlyChanged = onlyChanged;
+    this.purgeFiles = [];
   }
 
   _createClass(BunnyUpload, [{
@@ -157,25 +158,22 @@ var BunnyUpload = /*#__PURE__*/function () {
 
               case 16:
                 console.log(_chalk["default"].blue("UPLOADED SUCCESSFULLY: ".concat(p)));
-                _context2.next = 19;
-                return this.purge("".concat(this.purgeUrl, "/").concat(p2, "/").concat(fileName));
-
-              case 19:
-                _context2.next = 25;
+                this.purgeFiles.push("".concat(this.purgeUrl, "/").concat(p2, "/").concat(fileName));
+                _context2.next = 24;
                 break;
 
-              case 21:
-                _context2.prev = 21;
+              case 20:
+                _context2.prev = 20;
                 _context2.t0 = _context2["catch"](1);
                 console.log(_chalk["default"].red('FAILED UPLOADING:' + p));
                 console.log(_chalk["default"].red(_context2.t0.message));
 
-              case 25:
+              case 24:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[1, 21]]);
+        }, _callee2, this, [[1, 20]]);
       }));
 
       function performUpload(_x2, _x3, _x4, _x5) {
@@ -377,56 +375,151 @@ var BunnyUpload = /*#__PURE__*/function () {
       return true;
     }
   }, {
-    key: "s2",
+    key: "sleep",
+    value: function sleep(ms) {
+      return new Promise(function (resolve) {
+        return setTimeout(resolve, ms);
+      });
+    }
+  }, {
+    key: "executePurgeRequests",
     value: function () {
-      var _s = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(localDir, cdnPath, concurrency) {
-        var _this = this;
+      var _executePurgeRequests = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+        var purgeFiles, _iterator2, _step2, fileName;
 
-        var toUpload, localDirBackupFiles, promiseIterator, pool;
         return regeneratorRuntime.wrap(function _callee5$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                _context6.next = 2;
-                return this.getAllFiles(localDir);
+                console.log(_chalk["default"].yellow("Waiting 10 seconds before purging uploads..."));
+                _context6.next = 3;
+                return this.sleep(5000);
 
-              case 2:
-                toUpload = _context6.sent;
-                localDirBackupFiles = false;
+              case 3:
+                console.log(_chalk["default"].yellow("Waiting 5 seconds before purging uploads..."));
+                _context6.next = 6;
+                return this.sleep(5000);
 
-                if (!(this.onlyChanged === true)) {
-                  _context6.next = 8;
+              case 6:
+                console.log(_chalk["default"].blue("Executing Purge Requests"));
+                purgeFiles = this.purgeFiles;
+                _iterator2 = _createForOfIteratorHelper(purgeFiles);
+                _context6.prev = 9;
+
+                _iterator2.s();
+
+              case 11:
+                if ((_step2 = _iterator2.n()).done) {
+                  _context6.next = 17;
                   break;
                 }
 
-                _context6.next = 7;
-                return this.getAllFiles(".bunny-upload/backup/".concat(localDir));
+                fileName = _step2.value;
+                _context6.next = 15;
+                return this.purge(fileName);
 
-              case 7:
-                localDirBackupFiles = _context6.sent;
+              case 15:
+                _context6.next = 11;
+                break;
 
-              case 8:
-                promiseIterator = this.generatePromises(toUpload, localDirBackupFiles, localDir, cdnPath);
-                pool = new _es6PromisePool["default"](promiseIterator, concurrency);
-                return _context6.abrupt("return", pool.start().then(function () {
-                  console.log(_chalk["default"].green('FINISHED UPLOADING JOBS')); // Create the .bunny-upload folder & move /dist into it
+              case 17:
+                _context6.next = 22;
+                break;
 
-                  if (_this.onlyChanged === true) {
-                    var backupStatus = _this.storeLocalDirBackup(localDir);
+              case 19:
+                _context6.prev = 19;
+                _context6.t0 = _context6["catch"](9);
 
-                    if (backupStatus != true) {
-                      console.warn('The local dir backup ran into an issue:');
-                      console.error(backupStatus);
-                    }
-                  }
-                }));
+                _iterator2.e(_context6.t0);
 
-              case 11:
+              case 22:
+                _context6.prev = 22;
+
+                _iterator2.f();
+
+                return _context6.finish(22);
+
+              case 25:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee5, this, [[9, 19, 22, 25]]);
+      }));
+
+      function executePurgeRequests() {
+        return _executePurgeRequests.apply(this, arguments);
+      }
+
+      return executePurgeRequests;
+    }()
+  }, {
+    key: "s2",
+    value: function () {
+      var _s = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(localDir, cdnPath, concurrency) {
+        var _this = this;
+
+        var toUpload, localDirBackupFiles, promiseIterator, pool;
+        return regeneratorRuntime.wrap(function _callee7$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _context8.next = 2;
+                return this.getAllFiles(localDir);
+
+              case 2:
+                toUpload = _context8.sent;
+                localDirBackupFiles = false;
+
+                if (!(this.onlyChanged === true)) {
+                  _context8.next = 8;
+                  break;
+                }
+
+                _context8.next = 7;
+                return this.getAllFiles(".bunny-upload/backup/".concat(localDir));
+
+              case 7:
+                localDirBackupFiles = _context8.sent;
+
+              case 8:
+                promiseIterator = this.generatePromises(toUpload, localDirBackupFiles, localDir, cdnPath);
+                pool = new _es6PromisePool["default"](promiseIterator, concurrency);
+                return _context8.abrupt("return", pool.start().then( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+                  var backupStatus;
+                  return regeneratorRuntime.wrap(function _callee6$(_context7) {
+                    while (1) {
+                      switch (_context7.prev = _context7.next) {
+                        case 0:
+                          console.log(_chalk["default"].green('FINISHED UPLOADING JOBS'));
+                          _context7.next = 3;
+                          return _this.executePurgeRequests();
+
+                        case 3:
+                          // Create the .bunny-upload folder & move /dist into it
+                          if (_this.onlyChanged === true) {
+                            backupStatus = _this.storeLocalDirBackup(localDir);
+
+                            if (backupStatus != true) {
+                              console.warn('The local dir backup ran into an issue:');
+                              console.error(backupStatus);
+                            }
+                          }
+
+                        case 4:
+                        case "end":
+                          return _context7.stop();
+                      }
+                    }
+                  }, _callee6);
+                }))));
+
+              case 11:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee7, this);
       }));
 
       function s2(_x11, _x12, _x13) {

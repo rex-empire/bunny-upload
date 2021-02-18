@@ -151,7 +151,7 @@ export default class BunnyUpload {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
-	executePurgeRequests() {
+	async executePurgeRequests() {
 		console.log(chalk.yellow(`Waiting 10 seconds before purging uploads...`));
 		await this.sleep(5000);
 		console.log(chalk.yellow(`Waiting 5 seconds before purging uploads...`));
@@ -176,10 +176,10 @@ export default class BunnyUpload {
 		const pool = new PromisePool(promiseIterator, concurrency);
 
 		return pool.start()
-			.then(() => {
+			.then(async () => {
 				console.log(chalk.green('FINISHED UPLOADING JOBS'));
 
-				this.executePurgeRequests();
+				await this.executePurgeRequests();
 
 				// Create the .bunny-upload folder & move /dist into it
 				if (this.onlyChanged === true) {
